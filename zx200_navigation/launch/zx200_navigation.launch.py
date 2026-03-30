@@ -7,7 +7,9 @@ from launch.actions import DeclareLaunchArgument, GroupAction, OpaqueFunction
 from launch.substitutions import LaunchConfiguration
 from nav2_common.launch import RewrittenYaml
 from launch.conditions import IfCondition
-
+from launch_ros.parameter_descriptions import ParameterValue
+from launch.substitutions import Command
+from ament_index_python.packages import get_package_share_path
 
 use_autostart = True
 use_respawn = True
@@ -16,14 +18,20 @@ use_respawn = True
 def generate_launch_description():
 
     zx200_navigation_dir = get_package_share_directory('zx200_navigation')
-    navigation_parameters_yaml_file = os.path.join(zx200_navigation_dir, 'params', 'navigation_parameters.yaml')
-    navigation_parameters_sim_yaml_file = os.path.join(zx200_navigation_dir, 'params', 'navigation_parameters_sim.yaml')
 
+    zx200_description_path = get_package_share_path('zx200_description')
+    default_model_path = zx200_description_path / 'urdf/zx200.xacro'
+    # navigation_parameters_yaml_file = os.path.join(zx200_navigation_dir, 'params', 'navigation_parameters.yaml')
+    navigation_parameters_sim_yaml_file = os.path.join(zx200_navigation_dir, 'params', 'navigation_parameters_sim.yaml')
+    navigation_parameters_yaml_file = os.path.join(zx200_navigation_dir, 'params', 'navigation_parameters_test.yaml')
+
+
+    model_arg = DeclareLaunchArgument(name='model', default_value=str(default_model_path),description='Absolute path to robot urdf file')
     robot_name_arg = DeclareLaunchArgument('robot_name', default_value='zx200_1')
     use_namespace_arg = DeclareLaunchArgument('use_namespace', default_value='true')
     use_sim_time_arg = DeclareLaunchArgument('use_sim_time', default_value='false')
-    use_navigation_xy_goal_tolerance_arg = DeclareLaunchArgument('navigation_xy_goal_tolerance', default_value='1.0')
-    use_navigation_yaw_goal_tolerance_arg = DeclareLaunchArgument('navigation_yaw_goal_tolerance', default_value='0.15')
+    use_navigation_xy_goal_tolerance_arg = DeclareLaunchArgument('navigation_xy_goal_tolerance', default_value='0.30')
+    use_navigation_yaw_goal_tolerance_arg = DeclareLaunchArgument('navigation_yaw_goal_tolerance', default_value='0.30')
 
     map_yaml_file = LaunchConfiguration('map', default=os.path.join(zx200_navigation_dir, 'map', 'map.yaml'))
     robot_name = LaunchConfiguration('robot_name')
@@ -34,6 +42,9 @@ def generate_launch_description():
 
     lifecycle_nodes_localization = ['map_server']
 
+    zx200_unity_dir = get_package_share_directory("zx200_unity")
+    rviz_file = os.path.join(zx200_unity_dir, "rviz2", "zx200_standby.rviz")
+
     lifecycle_nodes_navigation = [
         'controller_server',
         'smoother_server',
@@ -43,6 +54,11 @@ def generate_launch_description():
         'waypoint_follower',
         'velocity_smoother'
     ]
+
+
+
+    robot_description = ParameterValue(Command(['xacro ', LaunchConfiguration('model')]),
+                                       value_type=str)
 
     def launch_setup(context, *args, **kwargs):
         use_sim_time_str = use_sim_time.perform(context).strip().lower()
@@ -199,6 +215,7 @@ def generate_launch_description():
                     parameters=[configured_params],
                 ),
                 
+                
                 Node(
                     package='nav2_lifecycle_manager',
                     executable='lifecycle_manager',
@@ -209,10 +226,25 @@ def generate_launch_description():
                         'node_names': lifecycle_nodes_navigation
                     }]
                 ),
+
+                Node(
+                    package='robot_state_publisher',
+                    executable='robot_state_publisher',
+                    parameters=[{'robot_description': robot_description}]
+                ),
+
+                Node(
+                package="rviz2",
+                executable="rviz2",
+                name="rviz",
+                parameters=[{'use_sim_time': use_sim_time}],
+                arguments=["--display-config", rviz_file]
+                ),
             ])
         ]
 
     return LaunchDescription([
+        model_arg,
         robot_name_arg,
         use_namespace_arg,
         use_sim_time_arg, 

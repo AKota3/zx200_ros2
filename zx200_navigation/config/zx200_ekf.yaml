@@ -2,7 +2,7 @@ zx200:
     ekf_global:
         ros__parameters:
             # for wheel and imu fusion
-            use_sim_time: true
+            use_sim_time: false
             debug: false
             frequency: 10.0
             transform_time_offset: 0.0

@@ -21,4 +21,23 @@ def generate_launch_description():
         IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(zx200_navigation_launch_file_path),
         ),
+#         Node(
+#         package='tf2_ros',
+#         executable='static_transform_publisher',
+#         name='world_to_map',
+#         arguments=['--x','21395.178',
+#         '--y','14034.450',
+#         '--z','28.552',
+#         '--roll','0',
+#  '      --pitch','0',
+#         '--yaw','0',
+#         '--frame-id', 'world',
+#         '--child-frame-id', 'map']),
+        Node(
+            package='zx200_navigation',
+            executable='world_coodinate_converter',
+        )
+
+
+
     ])

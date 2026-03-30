@@ -36,6 +36,7 @@ setup(
             'odom_broadcaster = zx200_navigation.odom_broadcaster:main',
             'map_generator = zx200_navigation.map_generator:main',
             'message_converter_odom = zx200_navigation.message_converter_odom:main',
+            'world_coodinate_converter = zx200_navigation.world_to_map:main'
         ],
     },
 )
