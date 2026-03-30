@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<library path="goal_checker">
+  <class
+    name="goal_checker/YGoalChecker"
+    type="goal_checker::YGoalChecker"
+    base_class_type="nav2_core::GoalChecker">
+    <description>Goal chekcer for </description>
+  </class>
+</library>
+

@@ -1,0 +1,21 @@
+<root main_tree_to_execute="MainTree">
+  <BehaviorTree ID="MainTree">
+
+    <Sequence name="StraightNavigation">
+
+      <ComputePathToPose goal="{goal}" path="{path}"/>
+
+      <Fallback>
+
+        <!-- ゴールに入ったら終了 -->
+        <GoalReached/>
+
+        <!-- まだなら進む -->
+        <FollowPath path="{path}" controller_id="LinearPath"/>
+
+      </Fallback>
+
+    </Sequence>
+
+  </BehaviorTree>
+</root>

@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<library path="linear_path_controller">
+  <class
+    name="linear_path_controller/LinearPathController"
+    type="linear_path_controller::LinearPathController"
+    base_class_type="nav2_core::Controller">
+    <description>My simple controller</description>
+  </class>
+</library>
+
