@@ -10,6 +10,7 @@
 #include "nav_msgs/msg/path.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "nav2_costmap_2d/costmap_2d_ros.hpp"
+#include "tf2_ros/buffer.h"
 
 namespace straight_line_planner
 {
@@ -23,7 +24,7 @@ public:
   void configure(
     const rclcpp_lifecycle::LifecycleNode::WeakPtr & parent,
     std::string name,
-    std::shared_ptr<tf2_ros::Buffer>,
+    std::shared_ptr<tf2_ros::Buffer> tf,
     std::shared_ptr<nav2_costmap_2d::Costmap2DROS>) override;
 
   void cleanup() override {}
@@ -36,8 +37,12 @@ public:
 
 private:
   rclcpp::Logger logger_{rclcpp::get_logger("StraightLinePlanner")};
+
+  std::shared_ptr<tf2_ros::Buffer> tf_;
+  rclcpp_lifecycle::LifecycleNode::SharedPtr node_;
+
   std::string global_frame_;
-  double interpolation_resolution_{0.05}; // 点間距離
+  double interpolation_resolution_{0.05};
 };
 
 }  // namespace straight_line_planner

@@ -212,9 +212,10 @@ controller_server:
       # plugin: "my_controller/MyController"
       debug_trajectory_details: false
       desired_linear_vel: 1.0
-      max_angular_vel: 0.4
-      k1: 0.00001
-      k2: 0.000005
+      max_angular_vel: 0.05
+      k1: 0.01
+      k2: 0.05
+      goal_tolerance: 1.0
       min_vel_x: -3.0
       min_vel_y: 0.0
       max_vel_x: 3.0
@@ -400,14 +401,14 @@ planner_server:
     expected_planner_frequency: 10.0
     use_sim_time: False
     planner_plugins: ["GridBased"]
-    GridBased:
-      plugin: "nav2_navfn_planner/NavfnPlanner"
-      tolerance: 0.25
-      use_astar: false
-      allow_unknown: true
     # GridBased:
-    #   plugin: "straight_line_planner/StraightLinePlanner"
-    #   interpolation_resolution: 0.05
+    #   plugin: "nav2_navfn_planner/NavfnPlanner"
+    #   tolerance: 0.25
+    #   use_astar: false
+    #   allow_unknown: true
+    GridBased:
+      plugin: "straight_line_planner/StraightLinePlanner"
+      interpolation_resolution: 0.05
 
 smoother_server:
   ros__parameters:
