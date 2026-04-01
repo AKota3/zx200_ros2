@@ -141,7 +141,8 @@ controller_server:
     min_theta_velocity_threshold: 0.001
     failure_tolerance: 0.3
     progress_checker_plugins: ["progress_checker"]
-    goal_checker_plugins: ["general_goal_checker"] # "precise_goal_checker"
+    # goal_checker_plugins: ["general_goal_checker"] # "precise_goal_checker"
+    goal_checker_plugins: ["linear_goal_checker"] 
     # controller_plugins: ["FollowPath"]
     controller_plugins: ["LinearPath"]
     odom_topic: "/zx200/odom_pose"
@@ -161,6 +162,12 @@ controller_server:
       stateful: True
       plugin: "nav2_controller::SimpleGoalChecker"
       xy_goal_tolerance: 1.00 #0.25
+      yaw_goal_tolerance: 6.28 #0.25
+    linear_goal_checker:
+      stateful: True
+      plugin: "goal_checker/YGoalChecker"
+      y_tolerance: 0.300
+      xy_goal_tolerance: 0.300 #0.25
       yaw_goal_tolerance: 6.28 #0.25
     # DWB parameters
     FollowPath:
@@ -215,7 +222,7 @@ controller_server:
       max_angular_vel: 0.05
       k1: 0.01
       k2: 0.05
-      goal_tolerance: 1.0
+      goal_tolerance: 0.30
       min_vel_x: -3.0
       min_vel_y: 0.0
       max_vel_x: 3.0
