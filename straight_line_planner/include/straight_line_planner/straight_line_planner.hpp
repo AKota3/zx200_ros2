@@ -36,13 +36,18 @@ public:
     const geometry_msgs::msg::PoseStamped & goal) override;
 
 private:
+  // ===== 基本 =====
   rclcpp::Logger logger_{rclcpp::get_logger("StraightLinePlanner")};
-
-  std::shared_ptr<tf2_ros::Buffer> tf_;
   rclcpp_lifecycle::LifecycleNode::SharedPtr node_;
+  std::shared_ptr<tf2_ros::Buffer> tf_;
 
   std::string global_frame_;
   double interpolation_resolution_{0.05};
+
+  // ===== ★追加（今回のキモ）=====
+  geometry_msgs::msg::PoseStamped last_goal_;  // 前回ゴール
+  bool has_last_goal_{false};                  // 初回判定
+  double goal_update_threshold_{0.01};         // ゴール更新閾値
 };
 
 }  // namespace straight_line_planner
