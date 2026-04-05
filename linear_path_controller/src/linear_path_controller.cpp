@@ -74,65 +74,67 @@ public:
   {
     geometry_msgs::msg::TwistStamped cmd_vel;
     cmd_vel.header.stamp = clock_->now();
-    cmd_vel.header.frame_id = pose.header.frame_id;
 
-    if (global_plan_.poses.size() < 2) {
+    if (global_plan_.poses.empty()) {
       return cmd_vel;
     }
 
-    // ===== TF変換 =====
-    nav_msgs::msg::Path transformed_plan;
     std::string target_frame = costmap_ros_->getBaseFrameID();
 
-    for (auto & p : global_plan_.poses) {
-      geometry_msgs::msg::PoseStamped tf_pose;
+    // ===== goal transform =====
+    geometry_msgs::msg::PoseStamped goal_tf;
 
-      try {
-        tf_pose = tf_->transform(
-          p,
-          target_frame,
-          tf2::durationFromSec(0.2)
-        );
-        transformed_plan.poses.push_back(tf_pose);
+    try {
+      auto goal_pose = global_plan_.poses.back();
 
-      } catch (tf2::TransformException & ex) {
-        RCLCPP_WARN(logger_,
-          "TF failed: %s (from %s to %s)",
-          ex.what(),
-          p.header.frame_id.c_str(),
-          target_frame.c_str());
+      if (goal_pose.header.frame_id.empty()) {
+        RCLCPP_ERROR(logger_, "Goal frame_id is EMPTY!");
         return cmd_vel;
       }
-    }
 
-    if (transformed_plan.poses.empty()) {
+      goal_tf = tf_->transform(goal_pose, target_frame);
+
+    } catch (tf2::TransformException & ex) {
+      RCLCPP_WARN(logger_, "Goal TF failed: %s", ex.what());
       return cmd_vel;
     }
 
-    // ===== 経路情報 =====
-    auto start = transformed_plan.poses.front().pose.position;
-    auto goal  = transformed_plan.poses.back().pose.position;
+    // ===== 自分のpose transform =====
+    geometry_msgs::msg::PoseStamped pose_tf;
 
-    double dx = goal.x - start.x;
-    double dy = goal.y - start.y;
-    double path_theta = atan2(dy, dx);
+    try {
+      if (pose.header.frame_id.empty()) {
+        RCLCPP_ERROR(logger_, "Pose frame_id is EMPTY!");
+        return cmd_vel;
+      }
 
-    double yaw = tf2::getYaw(pose.pose.orientation);
-    double goal_dist = hypot(goal.x, goal.y);
+      pose_tf = tf_->transform(pose, target_frame);
 
-    // ===== ゴール停止 =====
+    } catch (tf2::TransformException & ex) {
+      RCLCPP_WARN(logger_, "Pose TF failed: %s", ex.what());
+      return cmd_vel;
+    }
+
+    // ===== 状態取得 =====
+    double x = goal_tf.pose.position.x;
+    double y = goal_tf.pose.position.y;
+
+    double yaw = tf2::getYaw(pose_tf.pose.orientation);
+
+    double goal_dist = hypot(x, y);
+
+    // ===== ゴール判定 =====
     if (goal_dist < goal_tolerance_) {
       cmd_vel.twist.linear.x = 0.0;
       cmd_vel.twist.angular.z = 0.0;
       return cmd_vel;
     }
 
-    // ===== 横ずれ（重要修正）=====
-    double y = goal.y;
+    // ===== 経路方向 =====
+    double path_theta = atan2(y, x);
 
     // ===== 進行方向判定 =====
-    double goal_theta = atan2(goal.y, goal.x);
-    double heading_error = yaw - goal_theta;
+    double heading_error = yaw - path_theta;
     heading_error = atan2(sin(heading_error), cos(heading_error));
 
     double c = cos(heading_error);
@@ -141,7 +143,7 @@ public:
     if (c > threshold) direction_ = 1.0;
     else if (c < -threshold) direction_ = -1.0;
 
-    // ===== 有効yaw（後退対応）=====
+    // ===== 有効yaw =====
     double effective_yaw = yaw;
 
     if (direction_ < 0.0) {
@@ -154,9 +156,9 @@ public:
 
     // ===== 速度生成 =====
     double speed_scale = std::min(1.0, goal_dist);
-    double linear_vel = direction_ * desired_linear_vel_ * speed_scale;
 
-    double angular_vel = direction_*(k1_ * theta + k2_ * y);
+    double linear_vel = direction_ * desired_linear_vel_ * speed_scale;
+    double angular_vel = direction_ * (k1_ * theta + k2_ * y);
 
     angular_vel = std::max(
       -fabs(max_angular_vel_),
