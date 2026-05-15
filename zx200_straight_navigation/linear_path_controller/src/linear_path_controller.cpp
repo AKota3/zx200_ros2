@@ -158,7 +158,15 @@ public:
     double speed_scale = std::min(1.0, goal_dist);
 
     double linear_vel = direction_ * desired_linear_vel_ * speed_scale;
-    double angular_vel = direction_ * (k1_ * theta + k2_ * y);
+    // double angular_vel = direction_ * (k1_ * theta + k2_ * y);
+
+
+    double angular_vel;
+    if (direction_ > 0.0) {
+      angular_vel = k1_ * theta + k2_ * y;
+    } else {
+      angular_vel = k1_ * theta - k2_ * y;
+    }
 
     angular_vel = std::max(
       -fabs(max_angular_vel_),
