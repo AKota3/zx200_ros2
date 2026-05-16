@@ -218,18 +218,12 @@ controller_server:
       plugin: "linear_path_controller::LinearPathController"
       # plugin: "my_controller/MyController"
       debug_trajectory_details: false
-      desired_linear_vel: 1.0
+      desired_linear_vel: 0.50 #1.0
       max_angular_vel: 5.1 #0.1
       k1: -0.05 #-0.01
-      k2: 2.0 #0.20
+      k2: 0.25 #0.20
       goal_tolerance: 0.30
-      max_vel_theta: 1.0
-      acc_lim_x: 3.0 
-      acc_lim_y: 0.0
-      acc_lim_theta: 3.1
-      decel_lim_x: -2.5
-      decel_lim_y: 0.0
-      decel_lim_theta: -3.2
+
       vx_samples: 25
       vy_samples: 5
       vtheta_samples: 25
