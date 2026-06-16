@@ -141,7 +141,7 @@ controller_server:
     progress_checker_plugins: ["progress_checker"]
     goal_checker_plugins: ["general_goal_checker"] # "precise_goal_checker"
     controller_plugins: ["FollowPath"]
-    odom_topic: "/zx200/odom"
+    odom_topic: "/zx200/odom_pose"
 
     # Progress checker parameters
     progress_checker:
