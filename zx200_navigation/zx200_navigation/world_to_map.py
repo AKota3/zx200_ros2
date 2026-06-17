@@ -11,9 +11,12 @@ class OffsetOdometryNode(Node):
         super().__init__('offset_odometry_node')
 
         # 引く値（オフセット）
-        self.offset_x = 21395.178
-        self.offset_y = 14034.450
-        self.offset_z = 28.552
+        # self.offset_x = 21395.178
+        # self.offset_y = 14034.450
+        # self.offset_z = 28.552
+        self.offset_x = 0
+        self.offset_y = 0
+        self.offset_z = 0
 
         # Subscriber
         self.subscription = self.create_subscription(

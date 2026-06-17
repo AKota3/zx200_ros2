@@ -46,17 +46,18 @@ def generate_launch_description():
                     },
                 ]
             ),
-            Node(
-                package='zx200_navigation',
-                executable='poseStamped2Odometry',
-                name='poseStamped2ground_truth_odom',
-                output="screen",
-                parameters=[{'odom_header_frame': "map",
-                                'odom_child_frame': "base_link",
-                                'poseStamped_topic_name': "global_pose",
-                                'odom_topic_name': "global_pose_odom",
-                                'use_sim_time': use_sim_time}]
-            ),     
+            # Node(
+            #     package='zx200_navigation',
+            #     executable='poseStamped2Odometry',
+            #     name='poseStamped2ground_truth_odom',
+            #     output="screen",
+            #     parameters=[{'odom_header_frame': "map",
+            #                     'odom_child_frame': "base_link",
+            #                     'poseStamped_topic_name': "global_pose",#here#
+            #                     'odom_topic_name': "global_pose_odom",
+            #                     'use_sim_time': use_sim_time}]
+            # ),   
+            #   
             # Node(
             #     package = 'zx200_navigation',
             #     executable = 'message_converter_odom',
@@ -76,9 +77,21 @@ def generate_launch_description():
                 parameters=[zx200_ekf_yaml_file,
                             {
                                 'odom0' : 'odom_pose',
-                                'odom1' : 'global_pose_odom_map',
+                                # 'odom1' : 'global_pose_odom_map',
+                                'odom1' : 'odometry/global/aruco_add_frame',
 
                             }]
+            ),
+
+            Node(
+                package='zx200_navigation',
+                executable='odom_frame_setter',
+                name='odom_frame_setter',
+                output='screen',
+                parameters=[{'input_topic': "odometry/global/aruco",
+                                'output_topic': "odometry/global/aruco_add_frame",
+                                'frame_id': "map",
+                                'child_frame_id': "base_link"}]
             )
         ])
     ])
