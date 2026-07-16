@@ -79,6 +79,18 @@ def generate_launch_description():
                                 'odom1' : 'global_pose_odom_map',
 
                             }]
+            ),
+            Node(
+                package='zx200_navigation',
+                executable='connection_ditector',
+                name='safety_node',
+                output='screen',
+                parameters=[{
+                                'input_pose_topic' : 'global_pose',
+                                'input_velosity_topic' : 'nav2_cmd_vel',
+                                'output_velosity_topic' : 'cmd_vel',
+
+                            }]
             )
         ])
     ])
