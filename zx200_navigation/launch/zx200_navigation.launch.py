@@ -216,6 +216,10 @@ def generate_launch_description():
                     respawn=use_respawn,
                     respawn_delay=2.0,
                     parameters=[configured_params],
+                    remappings=[
+                        ('cmd_vel', 'cmd_vel_nav'),
+                        ('cmd_vel_smoothed', 'cmd_vel')
+                    ]
                 ),
                 
                 
