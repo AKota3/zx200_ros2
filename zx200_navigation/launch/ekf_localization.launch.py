@@ -88,10 +88,24 @@ def generate_launch_description():
                 executable='odom_frame_setter',
                 name='odom_frame_setter',
                 output='screen',
-                parameters=[{'input_topic': "odometry/global/aruco",
+                parameters=[{
+                                'input_topic': "odometry/global/aruco",
                                 'output_topic': "odometry/global/aruco_add_frame",
                                 'frame_id': "map",
-                                'child_frame_id': "base_link"}]
+                                'child_frame_id': "base_link"
+                            }]
+            ),
+            Node(
+                package='zx200_navigation',
+                executable='connection_ditector',
+                name='safety_node',
+                output='screen',
+                parameters=[{
+                                'input_pose_topic' : 'odometry/global/aruco',
+                                'input_velosity_topic' : 'nav2_cmd_vel',
+                                'output_velosity_topic' : 'cmd_vel_nav',
+
+                            }]
             )
         ])
     ])

@@ -155,9 +155,19 @@ public:
     theta = atan2(sin(theta), cos(theta));
 
     // ===== 速度生成 =====
-    double speed_scale = std::min(1.0, goal_dist);
+    // 
+    double decel = 0.1; // m/s^2
 
-    double linear_vel = direction_ * desired_linear_vel_ * speed_scale;
+    double linear_speed = std::sqrt(2.0 * decel * goal_dist);
+
+    linear_speed = std::min(linear_speed, desired_linear_vel_);
+    double linear_vel = direction_ * linear_speed;
+    // 
+
+
+    // double speed_scale = std::min(1.0, goal_dist);
+
+    // double linear_vel = direction_ * desired_linear_vel_ * speed_scale;
     // double angular_vel = direction_ * (k1_ * theta + k2_ * y);
 
 
