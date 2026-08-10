@@ -2,8 +2,8 @@
   <BehaviorTree ID="MainTree">
 
     <Sequence>
-      <ComputePathToPose goal="{goal}" path="{path}"/>
-      <FollowPath path="{path}" controller_id="LinearPath"/>
+      <ComputePathToPose goal="{goal}" path="{path}" planner_id="GridBased"/>
+      <FollowPath path="{path}" controller_id="LinearPath" goal_checker_id="linear_goal_checker"/>
     </Sequence>
 
   </BehaviorTree>
