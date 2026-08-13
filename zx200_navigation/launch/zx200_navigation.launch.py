@@ -22,7 +22,7 @@ def generate_launch_description():
     zx200_description_path = get_package_share_path('zx200_description')
     default_model_path = zx200_description_path / 'urdf/zx200.xacro'
     # navigation_parameters_yaml_file = os.path.join(zx200_navigation_dir, 'params', 'navigation_parameters.yaml')
-    navigation_parameters_sim_yaml_file = os.path.join(zx200_navigation_dir, 'params', 'navigation_parameters_sim.yaml')
+    navigation_parameters_sim_yaml_file = os.path.join(zx200_navigation_dir, 'params', 'navigation_parameters_test.yaml')
     # navigation_parameters_sim_yaml_file = os.path.join(zx200_navigation_dir, 'params', 'navigation_parameters_test.yaml')
     navigation_parameters_yaml_file = os.path.join(zx200_navigation_dir, 'params', 'navigation_parameters_test.yaml')
 
@@ -234,19 +234,20 @@ def generate_launch_description():
                     }]
                 ),
 
-                Node(
-                    package='robot_state_publisher',
-                    executable='robot_state_publisher',
-                    parameters=[{'robot_description': robot_description}]
-                ),
+                # Node(
+                #     package='robot_state_publisher',
+                #     executable='robot_state_publisher',
+                #     parameters=[{'robot_description': robot_description},
+                #                 {'use_sim_time': use_sim_time}]
+                # ),
 
-                Node(
-                package="rviz2",
-                executable="rviz2",
-                name="rviz",
-                parameters=[{'use_sim_time': use_sim_time}],
-                arguments=["--display-config", rviz_file]
-                ),
+                # Node(
+                # package="rviz2",
+                # executable="rviz2",
+                # name="rviz",
+                # parameters=[{'use_sim_time': use_sim_time}],
+                # arguments=["--display-config", rviz_file]
+                # ),
             ])
         ]
 
