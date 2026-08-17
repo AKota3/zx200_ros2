@@ -4,6 +4,7 @@ import rclpy
 from rclpy.node import Node
 
 from geometry_msgs.msg import PoseStamped
+from nav_msgs.msg import Odometry
 from geometry_msgs.msg import Twist
 
 
@@ -15,10 +16,13 @@ class SafetyNode(Node):
         self.declare_parameter('input_pose_topic', "/zx200/global_pose")
         self.declare_parameter('input_velosity_topic', "/nav2_cmd_vel")
         self.declare_parameter('output_velosity_topic', "/zx200/cmd_vel")
+        # "odometry" または "pose_stamped"
+        self.declare_parameter('pose_msg_type', "pose_stamped")
 
         self.input_pose_topic = self.get_parameter('input_pose_topic').get_parameter_value().string_value
         self.input_velosity_topic = self.get_parameter('input_velosity_topic').get_parameter_value().string_value
         self.output_velosity_topic= self.get_parameter('output_velosity_topic').get_parameter_value().string_value
+        self.pose_msg_type = self.get_parameter('pose_msg_type').get_parameter_value().string_value
 
         # パラメータ
         self.declare_parameter("timeout", 0.5)
@@ -31,11 +35,21 @@ class SafetyNode(Node):
         self.last_cmd = Twist()
 
         # Subscriber
-        self.pose_sub = self.create_subscription(
-            PoseStamped,
-            self.input_pose_topic,
-            self.pose_callback,
-            10)
+        if self.pose_msg_type == "odometry":
+            self.pose_sub = self.create_subscription(
+                Odometry,
+                self.input_pose_topic,
+                self.pose_callback,
+                10)
+        elif self.pose_msg_type == "pose_stamped":
+            self.pose_sub = self.create_subscription(
+                PoseStamped,
+                self.input_pose_topic,
+                self.pose_callback,
+                10)
+        else:
+            self.get_logger().error("Invalid pose_msg_type. Use 'odometry' or 'pose_stamped'.")
+            raise ValueError("pose_msg_type must be 'odometry' or 'pose_stamped'")
 
         self.cmd_sub = self.create_subscription(
             Twist,

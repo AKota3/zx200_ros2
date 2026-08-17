@@ -89,7 +89,7 @@ def generate_launch_description():
                                 'input_pose_topic' : 'global_pose',
                                 'input_velosity_topic' : 'nav2_cmd_vel',
                                 'output_velosity_topic' : 'cmd_vel_nav',
-
+                                'pose_msg_type' : "pose_stamped",
                             }]
             )
         ])
