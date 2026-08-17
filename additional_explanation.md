@@ -1,22 +1,26 @@
+これらのプログラムは、"zx200_ros2(https://github.com/pwri-opera/zx200_ros2)"のナビゲーションに直線追従用のプログラムを追加したプログラムである。
+
 ### 直線追従ナビゲーションの追加部分に関する説明
 
 |branch|用途 |使用法 |
 | ------------ | -------- | ---- |
 |feature/add_nabigation| GNSSでの直進追従ナビゲーション用 | ゴールはtopicかRVIZより与えること(TMS非連携)|
 |feature/add_nabigation_for_AR|Arucoマーカーでの直進追従ナビゲーション用 | ゴールはtopicかRVIZより与えること(TMS非連携) |
-|feature/add_nabigation_for_TMS| GNSSでの直進追従ナビゲーション用| TMSと連携。TMSでfollow_straightを呼び出すと直線追従。ゴールをtopicかRVIZより与えた場合は、navigate_to_poseのデフォルトのBT(zx200_navigation/params/zx200_navigate_to_pose_w_replanning_and_recovery.xml)が読み出される。|
+|feature/add_nabigation_for_TMS| GNSS, Arucoマーカーでの直進追従ナビゲーション用| TMSと連携。TMSでfollow_straightを呼び出すと直線追従。ゴールをtopicかRVIZより与えた場合は、navigate_to_poseのデフォルトのBT(zx200_navigation/params/zx200_navigate_to_pose_w_replanning_and_recovery.xml)が読み出される。|
 
 
 
-### ナビゲーションの起動用コマンド
+### ナビゲーションの起動用コマンド(GNSS使用)
 ```
 cd ~/ros2-tms-for-construction_ws && source install/setup.bash
 ros2 launch zx200_bringup remote_navigation.launch.py
 ```
 
-
-
-
+### ナビゲーションの起動用コマンド(ARマーカー使用)
+```
+cd ~/ros2-tms-for-construction_ws && source install/setup.bash
+ros2 launch zx200_bringup remote_navigation_for_aruco.launch.py 
+```
 
 
 
@@ -62,6 +66,7 @@ public class PosePublisher : MonoBehaviour
         ros = ROSConnection.GetOrCreateInstance();
         ros.RegisterPublisher<PoseStampedMsg>(topicName);
 
+        ClockObject = GameObject.Find("WorldClock");
         ROSClockPublisher = ClockObject.GetComponent<ROSClockPublisher>();
         //////
         basePosition = transform.position;
@@ -142,7 +147,7 @@ public class PosePublisher : MonoBehaviour
 }
 ```
 
-
+---
 Arucoマーカーでのシミュレーションの場合は次のC#プログラムをOperaSimに追加すること。
 ```
 using UnityEngine;
@@ -170,6 +175,7 @@ public class ArucoPublisher : MonoBehaviour
         ros = ROSConnection.GetOrCreateInstance();
         ros.RegisterPublisher<OdometryMsg>(topicName);
 
+        ClockObject = GameObject.Find("WorldClock");
         ROSClockPublisher = ClockObject.GetComponent<ROSClockPublisher>();
     }
 
