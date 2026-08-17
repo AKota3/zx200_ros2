@@ -10,10 +10,13 @@ class OffsetOdometryNode(Node):
     def __init__(self):
         super().__init__('offset_odometry_node')
 
-        # 引く値（オフセット）
-        self.offset_x = 21395.178
-        self.offset_y = 14034.450
-        self.offset_z = 28.552
+        self.declare_parameter('offset_x', 21395.178)
+        self.declare_parameter('offset_y', 14034.450)
+        self.declare_parameter('offset_z', 28.552)
+
+        self.offset_x = self.get_parameter('offset_x').value
+        self.offset_y = self.get_parameter('offset_y').value
+        self.offset_z = self.get_parameter('offset_z').value
 
         # Subscriber
         self.subscription = self.create_subscription(

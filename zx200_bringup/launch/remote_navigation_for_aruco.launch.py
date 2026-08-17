@@ -17,7 +17,7 @@ def generate_launch_description():
     zx200_navigation_dir=get_package_share_directory("zx200_navigation")
 
     ekf_localization_launch_file_path=os.path.join(
-        zx200_navigation_dir,"launch","ekf_localization.launch.py"
+        zx200_navigation_dir,"launch","ekf_localization_for_aruco.launch.py"
     )
     zx200_navigation_launch_file_path=os.path.join(
         zx200_navigation_dir,"launch","zx200_navigation.launch.py"
@@ -80,9 +80,9 @@ def generate_launch_description():
             package='zx200_navigation',
             executable='world_coodinate_converter',
             parameters=[{
-                'offset_x': 21395.178,
-                'offset_y': 14034.450,
-                'offset_z': 28.552,
+                'offset_x': 0.0,
+                'offset_y': 0.0,
+                'offset_z': 0.0,
             }],
         ),
 
