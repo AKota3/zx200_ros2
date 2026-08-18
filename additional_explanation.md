@@ -31,6 +31,11 @@ ros2 launch zx200_bringup remote_navigation.launch.py  straight_only:=true
 ros2 launch zx200_bringup remote_navigation_for_aruco.launch.py straight_only:=true
 ```
 
+### 直線追従用のBTについて
+直線追従用のBTは、TMS_IF(https://github.com/irvs/tms_if_for_opera/tree/cf93b712544d689f132851f04c73deff8ef49fb4)のlaunchの以下の箇所で指定している。この直線追従用のBTを使用するためには、以下のBTのパスをローカルのものに書き換えること。
+https://github.com/irvs/tms_if_for_opera/blob/cf93b712544d689f132851f04c73deff8ef49fb4/launch/tms_if_for_opera.launch.py#L31
+または
+https://github.com/irvs/tms_if_for_opera/blob/cf93b712544d689f132851f04c73deff8ef49fb4/launch/tms_if_for_opera_excavator.launch.py#L31
 
 ### シミュレータ用の追加部分
 
