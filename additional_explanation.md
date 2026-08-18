@@ -4,9 +4,9 @@
 
 |branch|用途 |使用法 |
 | ------------ | -------- | ---- |
-|feature/add_nabigation| GNSSでの直進追従ナビゲーション用 | ゴールはtopicかRVIZより与えること(TMS非連携)|
-|feature/add_nabigation_for_AR|Arucoマーカーでの直進追従ナビゲーション用 | ゴールはtopicかRVIZより与えること(TMS非連携) |
-|feature/add_nabigation_for_TMS| GNSS, Arucoマーカーでの直進追従ナビゲーション用| TMSと連携。TMSでfollow_straightを呼び出すと直線追従。ゴールをtopicかRVIZより与えた場合は、navigate_to_poseのデフォルトのBT(zx200_navigation/params/zx200_navigate_to_pose_w_replanning_and_recovery.xml)が読み出される。|
+|feature/add_nabigation_for_TMS| GNSS, Arucoマーカーでの直線追従ナビゲーション用| TMSと連携。TMSでfollow_straightを呼び出すと直線追従。ゴールをtopicかRVIZより与えた場合は、navigate_to_poseのデフォルトのBT(zx200_navigation/params/zx200_navigate_to_pose_w_replanning_and_recovery.xml)が読み出される。|
+<!-- |feature/add_nabigation| GNSSでの直線追従ナビゲーション用 | ゴールはtopicかRVIZより与えること(TMS非連携)|
+|feature/add_nabigation_for_AR|Arucoマーカーでの直線追従用ビゲーション用 | ゴールはtopicかRVIZより与えること(TMS非連携) | -->
 
 
 
@@ -22,6 +22,14 @@ cd ~/ros2-tms-for-construction_ws && source install/setup.bash
 ros2 launch zx200_bringup remote_navigation_for_aruco.launch.py 
 ```
 
+### コマンドラインから直線追従用のゴールを送信する/直線追従のみを行わせたい場合(必ず直線追従用BTが呼び出される)
+```
+ros2 launch zx200_bringup remote_navigation.launch.py  straight_only:=true
+```
+**or**
+```
+ros2 launch zx200_bringup remote_navigation_for_aruco.launch.py straight_only:=true
+```
 
 
 ### シミュレータ用の追加部分

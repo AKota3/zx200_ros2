@@ -23,14 +23,16 @@ def generate_launch_description():
     default_model_path = zx200_description_path / 'urdf/zx200.xacro'
     # navigation_parameters_yaml_file = os.path.join(zx200_navigation_dir, 'params', 'navigation_parameters.yaml')
     navigation_parameters_sim_yaml_file = os.path.join(zx200_navigation_dir, 'params', 'navigation_parameters_test.yaml')
-    # navigation_parameters_sim_yaml_file = os.path.join(zx200_navigation_dir, 'params', 'navigation_parameters_test.yaml')
     navigation_parameters_yaml_file = os.path.join(zx200_navigation_dir, 'params', 'navigation_parameters_test.yaml')
+    navigation_parameters_straight_only_yaml_file = os.path.join(zx200_navigation_dir, 'params', 'navigation_parameters_straight_only.yaml')
+    
 
 
     model_arg = DeclareLaunchArgument(name='model', default_value=str(default_model_path),description='Absolute path to robot urdf file')
     robot_name_arg = DeclareLaunchArgument('robot_name', default_value='zx200_1')
     use_namespace_arg = DeclareLaunchArgument('use_namespace', default_value='true')
     use_sim_time_arg = DeclareLaunchArgument('use_sim_time', default_value='false')
+    straight_only_arg = DeclareLaunchArgument('straight_only', default_value='false')
     use_navigation_xy_goal_tolerance_arg = DeclareLaunchArgument('navigation_xy_goal_tolerance', default_value='0.30')
     use_navigation_yaw_goal_tolerance_arg = DeclareLaunchArgument('navigation_yaw_goal_tolerance', default_value='0.30')
 
@@ -38,6 +40,7 @@ def generate_launch_description():
     robot_name = LaunchConfiguration('robot_name')
     use_namespace = LaunchConfiguration('use_namespace')
     use_sim_time = LaunchConfiguration('use_sim_time')
+    straight_only = LaunchConfiguration('straight_only')
     use_navigation_xy_goal_tolerance = LaunchConfiguration('navigation_xy_goal_tolerance')
     use_navigation_yaw_goal_tolerance = LaunchConfiguration('navigation_yaw_goal_tolerance')
 
@@ -65,6 +68,10 @@ def generate_launch_description():
         use_sim_time_str = use_sim_time.perform(context).strip().lower()
         use_sim_bool = use_sim_time_str in ('true', '1', 'yes', 'y', 'on')
         nav_params_file = navigation_parameters_sim_yaml_file if use_sim_bool else navigation_parameters_yaml_file
+
+        straight_only_str = straight_only.perform(context).strip().lower()
+        straight_only_bool = straight_only_str in ('true', '1', 'yes', 'y', 'on')
+        nav_params_file = navigation_parameters_straight_only_yaml_file if straight_only_bool else nav_params_file
 
         param_substitutions = {
             # map yaml
@@ -256,6 +263,7 @@ def generate_launch_description():
         robot_name_arg,
         use_namespace_arg,
         use_sim_time_arg, 
+        straight_only_arg,
         use_navigation_xy_goal_tolerance_arg,
         use_navigation_yaw_goal_tolerance_arg,
 

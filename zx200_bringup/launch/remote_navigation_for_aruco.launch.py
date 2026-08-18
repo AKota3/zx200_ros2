@@ -31,6 +31,7 @@ def generate_launch_description():
     robot_name_arg = DeclareLaunchArgument('robot_name', default_value='zx200')
     use_namespace_arg = DeclareLaunchArgument('use_namespace', default_value='true')
     use_sim_time_arg = DeclareLaunchArgument('use_sim_time', default_value='false')
+    straight_only_arg = DeclareLaunchArgument('straight_only', default_value='false')
     model_arg = DeclareLaunchArgument(name='model', default_value=str(default_model_path),description='Absolute path to robot urdf file')
 
 
@@ -38,6 +39,7 @@ def generate_launch_description():
     robot_name = LaunchConfiguration('robot_name')
     use_namespace = LaunchConfiguration('use_namespace')
     use_sim_time = LaunchConfiguration('use_sim_time')
+    straight_only = LaunchConfiguration('straight_only')
 
     robot_description = ParameterValue(Command(['xacro ', LaunchConfiguration('model')]), value_type=str)
 
@@ -45,6 +47,7 @@ def generate_launch_description():
         robot_name_arg,
         use_namespace_arg,
         use_sim_time_arg,
+        straight_only_arg,
         model_arg,
 
         IncludeLaunchDescription(
@@ -62,6 +65,7 @@ def generate_launch_description():
                 'robot_name': robot_name,
                 'use_namespace': 'true',
                 'use_sim_time': use_sim_time,
+                'straight_only': straight_only,
             }.items(),
         ),
 #         Node(
