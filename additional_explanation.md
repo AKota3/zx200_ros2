@@ -43,6 +43,11 @@ https://github.com/irvs/tms_if_for_opera/blob/cf93b712544d689f132851f04c73deff8e
 
 https://github.com/irvs/tms_if_for_opera/blob/cf93b712544d689f132851f04c73deff8ef49fb4/launch/tms_if_for_opera_excavator.launch.py#L31
 
+### ROS2-TMS for Construction と TMS-IF for Opera のブランチについて
+ROS2-TMS for Construction(https://github.com/irvs/ros2_tms_for_construction
+)と TMS-IF for Opera (https://github.com/irvs/tms_if_for_opera
+)のブランチは、”feature/primitive”で使用可能。
+
 ### シミュレータ用の追加部分
 
 プログラムは、実機に即したものとなっている。そのためOperaSimでナビゲーションを行う際には、OperaSimにGNSSの位置の出力を行う次のC#プログラムを作成し、zx200にアタッチすること。
@@ -58,7 +63,7 @@ using System.Collections;
 public class PosePublisher : MonoBehaviour
 {
     ROSConnection ros;
-    public string topicName = "unity_pose";
+    public string topicName = "/zx200/global_pose";
     ROSClockPublisher ROSClockPublisher;
     public GameObject ClockObject;
     public float OffsetX;
