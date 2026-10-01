@@ -89,7 +89,8 @@ def generate_launch_description():
                 name='odom_frame_setter',
                 output='screen',
                 parameters=[{
-                                'input_topic': "odometry/global/aruco",
+                                # 'input_topic': "odometry/global/aruco",
+                                'input_topic': "odometry/global/marker",
                                 'output_topic': "odometry/global/aruco_add_frame",
                                 'frame_id': "map",
                                 'child_frame_id': "base_link"
@@ -101,7 +102,8 @@ def generate_launch_description():
                 name='safety_node',
                 output='screen',
                 parameters=[{
-                                'input_pose_topic' : 'odometry/global/aruco',
+                                # 'input_pose_topic' : 'odometry/global/aruco',
+                                'input_pose_topic' : 'odometry/global/marker',
                                 'input_velosity_topic' : 'nav2_cmd_vel',
                                 'output_velosity_topic' : 'cmd_vel_nav',
                                 'pose_msg_type' : "odometry",
