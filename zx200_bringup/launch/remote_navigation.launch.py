@@ -84,9 +84,9 @@ def generate_launch_description():
             package='zx200_navigation',
             executable='world_coodinate_converter',
             parameters=[{
-                'offset_x': 21395.178,
-                'offset_y': 14034.450,
-                'offset_z': 28.552,
+                'offset_x': -19317.145,#21395.178,
+                'offset_y': -138648.38,#14034.450,
+                'offset_z': 52.157,#28.552,
             }],
         ),
 
