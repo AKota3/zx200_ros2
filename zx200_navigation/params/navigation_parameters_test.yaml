@@ -166,7 +166,7 @@ controller_server:
     linear_goal_checker:
       stateful: True
       plugin: "goal_checker::YGoalChecker"
-      y_tolerance: 0.300
+      y_tolerance: 0.100
     # DWB parameters
     FollowPath:
       plugin: "dwb_core::DWBLocalPlanner"
